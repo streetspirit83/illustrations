@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktive Potsdam Karte</title>
+    <style>
+        :root {
+            --primary-color: #0d233a;
+            --accent-color: #d4af37;
+            --bg-light: #f9f7f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container, der das Bild und die Overlays hält */
+        .map-container {
+            position: relative;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        /* Das Hintergrundbild */
+        .map-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Basis-Stil für die interaktiven Labels */
+        .hotspot {
+            position: absolute;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: all 0.2s ease-in-out;
+            line-height: normal;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* Hover-Effekt für die Labels */
+        .hotspot:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        /* Der Tooltip (Erklärtext) */
+        .hotspot .tooltip {
+            visibility: hidden;
+            width: 220px;
+            background-color: var(--bg-light);
+            color: #333;
+            text-align: left;
+            border-radius: 6px;
+            padding: 12px;
+            position: absolute;
+            z-index: 100;
+            bottom: 130%; /* Über dem Label anzeigen */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: normal;
+            font-weight: normal;
+            font-size: 13px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Kleiner Pfeil unten am Tooltip */
+        .hotspot .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--bg-light) transparent transparent transparent;
+        }
+
+        /* Tooltip sichtbar machen bei Hover/Klick */
+        .hotspot:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Titel im Tooltip */
+        .tooltip-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="map-container">
+    <img src="1000057903.png" alt="Potsdam Karte" class="map-image">
+
+    <div class="hotspot" style="top: 4.5%; left: 33.5%;">
+        Neues Palais
+        <div class="tooltip">
+            <div class="tooltip-title">Neues Palais</div>
+            Das letzte große Barockschloss Friedrichs des Großen am Westende des Parks Sanssouci. Berühmt für seine prunkvollen Festsäle.
+        </div>
+    </div>
+
+    <div class="hotspot" style="top: 12.5%; left: 65%;">
+        Schloss Sanssouci
+        <div class="tooltip">
+            <div class="tooltip-title">Schloss Sanssouci</div>
+            Das weltberühmte Sommerschloss Friedrichs des Großen auf den Weinbergterrassen. Ein Meisterwerk des Rokoko.
+        </div>
+    </div>
+
+    <div class="hotspot" style="top: 34%; left: 78.5%;">
+        Chinesisches Haus
+        <div class="tooltip">
+            <div class="tooltip-title">Chinesisches Haus</div>
+            Ein Pavillon im Park Sanssouci, der den damaligen Modetrend der Chinoiserie im 18. Jahrhundert widerspiegelt.
+        </div>
+    </div>
+
+    <div class="hotspot" style="top: 32.5%; left: 56.5%;">
+        Nikolaikirche
+        <div class="tooltip">
+            <div class="tooltip-title">Nikolaikirche</div>
+            Die markante Kuppelkirche am Alten Markt, entworfen von Karl Friedrich Schinkel, prägt die Silhouette der Innenstadt.
+        </div>
+    </div>
+
+    <div class="hotspot" style="top: 39.5%; left: 15.5%;">
+        Glienicker Brücke
+        <div class="tooltip">
+            <div class="tooltip-title">Glienicker Brücke</div>
+            Weltbekannt als „Agentenbrücke" für den Austausch von Spionen zwischen Ost und West während des Kalten Krieges.
+        </div>
+    </div>
+
+    <div class="hotspot" style="top: 55%; left: 18.5%;">
+        Pfingstberg
+        <div class="tooltip">
+            <div class="tooltip-title">Belvedere auf dem Pfingstberg</div>
+            Ein romantisches Aussichtsschloss nach Vorbildern der italienischen Renaissance mit einem fantastischen Blick über Potsdam.
+        </div>
+    </div>
+
+    <div class="hotspot" style="top: 69.5%; left: 42.5%;">
+        Alte Fahrt
+        <div class="tooltip">
+            <div class="tooltip-title">Alte Fahrt</div>
+            Ein Nebenarm der Havel im Zentrum Potsdams, der die Freundschaftsinsel umfließt und beliebt für Bootsfahrten ist.
+        </div>
+    </div>
+
+    <div class="hotspot" style="top: 74%; left: 78.5%;">
+        Brandenburger Tor
+        <div class="tooltip">
+            <div class="tooltip-title">Brandenburger Tor (Potsdam)</div>
+            Dieses Tor steht am Luisenplatz und ist sogar älter als das gleichnamige, bekanntere Tor in Berlin.
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
