@@ -1,0 +1,305 @@
+{
+  "schema_version": "discovery-1.0",
+  "blob_type": "inbox",
+  "updated_at": "2026-05-27T08:00:00Z",
+  "candidates": [
+    {
+      "id": "cand-001",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "yahoo_symbol": "AAPL",
+      "name": "Apple Inc.",
+      "isin": "US0378331005",
+      "workspace_state": "new",
+      "discovered_at": "2026-05-27T06:30:00Z",
+      "notes": "",
+      "sources": [
+        {
+          "adapter": "insider-monitor",
+          "signal_type": "insider_buy",
+          "discovered_at": "2026-05-27T06:30:00Z",
+          "info_snippet": "CFO Luca Maestri purchased 12,500 shares at $187.43 avg",
+          "raw_signal": {
+            "filer_name": "Luca Maestri",
+            "filer_title": "CFO",
+            "transaction_type": "P",
+            "shares": 12500,
+            "price_avg": 187.43,
+            "total_value": 2342875,
+            "form": "Form 4",
+            "filed_at": "2026-05-27T06:15:00Z"
+          }
+        },
+        {
+          "adapter": "etf-tracker",
+          "signal_type": "etf_addition",
+          "discovered_at": "2026-05-27T05:45:00Z",
+          "info_snippet": "Added to iShares MSCI World ETF rebalance batch (weight +0.4%)",
+          "raw_signal": {
+            "etf_ticker": "IWDA",
+            "etf_name": "iShares Core MSCI World UCITS ETF",
+            "weight_change": 0.4,
+            "effective_date": "2026-05-28",
+            "estimated_flow_usd": 840000000
+          }
+        }
+      ],
+      "enrichment": {
+        "enriched_at": "2026-05-27T07:00:00Z",
+        "model": "claude-sonnet-4-6",
+        "sector": "Technology",
+        "industry": "Consumer Electronics",
+        "market_cap_bucket": "large",
+        "region": "US",
+        "thesis_short": "Dual insider/ETF signal convergence with CFO purchase suggests management confidence ahead of WWDC announcements. ETF rebalance adds structural demand.",
+        "thesis_long": "## Investment Thesis\n\nApple is seeing **converging bullish signals** from two independent sources:\n\n1. **Insider Buying**: CFO Luca Maestri's $2.3M purchase is his largest open-market buy since 2021, historically preceding strong guidance quarters.\n2. **ETF Flow**: The IWDA rebalance adds an estimated $840M in passive buying pressure over the next 3 trading days.\n\nWith WWDC scheduled for June 9th and potential AI hardware announcements, the timing aligns with a catalyst window.",
+        "risks": [
+          "Macro headwinds from Fed policy uncertainty",
+          "China revenue exposure (~18% of total) amid trade tensions",
+          "Regulatory pressure on App Store margins in EU"
+        ],
+        "catalysts": [
+          "WWDC 2026 AI hardware announcements (June 9th)",
+          "Q2 earnings beat expectations",
+          "Services revenue acceleration to 25%+ margin"
+        ],
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "cand-002",
+      "symbol": "NVDA",
+      "exchange": "NASDAQ",
+      "yahoo_symbol": "NVDA",
+      "name": "NVIDIA Corporation",
+      "isin": "US67066G1040",
+      "workspace_state": "new",
+      "discovered_at": "2026-05-27T05:15:00Z",
+      "notes": "",
+      "sources": [
+        {
+          "adapter": "trend-scanner",
+          "signal_type": "trend_momentum",
+          "discovered_at": "2026-05-27T05:15:00Z",
+          "info_snippet": "52-week high breakout with volume 2.8x average. RSI 68 (not yet overbought)",
+          "raw_signal": {
+            "price": 924.50,
+            "52w_high": 921.00,
+            "volume": 52400000,
+            "avg_volume": 18700000,
+            "volume_ratio": 2.8,
+            "rsi_14": 68.2,
+            "macd_signal": "bullish_crossover",
+            "atr_14": 22.4
+          }
+        }
+      ],
+      "enrichment": null
+    },
+    {
+      "id": "cand-003",
+      "symbol": "JPM",
+      "exchange": "NYSE",
+      "yahoo_symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "isin": "US46625H1005",
+      "workspace_state": "reviewed",
+      "discovered_at": "2026-05-26T14:22:00Z",
+      "notes": "Strong Q1 results. Watch NII guidance for Q2.",
+      "sources": [
+        {
+          "adapter": "insider-monitor",
+          "signal_type": "insider_buy",
+          "discovered_at": "2026-05-26T14:22:00Z",
+          "info_snippet": "Director Virginia Rometty purchased 5,000 shares at $203.10",
+          "raw_signal": {
+            "filer_name": "Virginia Rometty",
+            "filer_title": "Director",
+            "transaction_type": "P",
+            "shares": 5000,
+            "price_avg": 203.10,
+            "total_value": 1015500,
+            "form": "Form 4",
+            "filed_at": "2026-05-26T14:00:00Z"
+          }
+        },
+        {
+          "adapter": "etf-tracker",
+          "signal_type": "etf_addition",
+          "discovered_at": "2026-05-26T13:55:00Z",
+          "info_snippet": "Added to SPDR Financial Select Sector ETF with 0.2% weight increase",
+          "raw_signal": {
+            "etf_ticker": "XLF",
+            "etf_name": "Financial Select Sector SPDR Fund",
+            "weight_change": 0.2,
+            "effective_date": "2026-05-27",
+            "estimated_flow_usd": 120000000
+          }
+        }
+      ],
+      "enrichment": null
+    },
+    {
+      "id": "cand-004",
+      "symbol": "BMW",
+      "exchange": "XETR",
+      "yahoo_symbol": "BMW.DE",
+      "name": "Bayerische Motoren Werke AG",
+      "isin": "DE0005190003",
+      "workspace_state": "new",
+      "discovered_at": "2026-05-27T07:45:00Z",
+      "notes": "",
+      "sources": [
+        {
+          "adapter": "insider-monitor",
+          "signal_type": "insider_buy",
+          "discovered_at": "2026-05-27T07:45:00Z",
+          "info_snippet": "Aufsichtsrat-Mitglied Norbert Reithofer kaufte 8.000 Aktien zu €88,20",
+          "raw_signal": {
+            "filer_name": "Norbert Reithofer",
+            "filer_title": "Aufsichtsratsvorsitzender",
+            "transaction_type": "Kauf",
+            "shares": 8000,
+            "price_avg": 88.20,
+            "total_value": 705600,
+            "currency": "EUR",
+            "form": "Directors Dealings",
+            "filed_at": "2026-05-27T07:30:00Z"
+          }
+        }
+      ],
+      "enrichment": null
+    },
+    {
+      "id": "cand-005",
+      "symbol": "SAP",
+      "exchange": "XETR",
+      "yahoo_symbol": "SAP.DE",
+      "name": "SAP SE",
+      "isin": "DE0007164600",
+      "workspace_state": "reviewed",
+      "discovered_at": "2026-05-26T09:10:00Z",
+      "notes": "Cloud transition progressing well. RISE with SAP momentum.",
+      "sources": [
+        {
+          "adapter": "trend-scanner",
+          "signal_type": "trend_momentum",
+          "discovered_at": "2026-05-26T09:10:00Z",
+          "info_snippet": "Golden cross (50MA crossing 200MA) confirmed. Price above all key MAs.",
+          "raw_signal": {
+            "price": 198.40,
+            "ma_50": 189.20,
+            "ma_200": 188.95,
+            "golden_cross_date": "2026-05-26",
+            "rsi_14": 61.5,
+            "volume_ratio": 1.4,
+            "trend_score": 82
+          }
+        }
+      ],
+      "enrichment": null
+    },
+    {
+      "id": "cand-006",
+      "symbol": "SHEL",
+      "exchange": "LSE",
+      "yahoo_symbol": "SHEL.L",
+      "name": "Shell plc",
+      "isin": "GB00BP6MXD84",
+      "workspace_state": "new",
+      "discovered_at": "2026-05-27T03:20:00Z",
+      "notes": "",
+      "sources": [
+        {
+          "adapter": "etf-tracker",
+          "signal_type": "etf_addition",
+          "discovered_at": "2026-05-27T03:20:00Z",
+          "info_snippet": "Significant inflow to FTSE 100 trackers following MSCI rebalance announcement",
+          "raw_signal": {
+            "etf_ticker": "ISF",
+            "etf_name": "iShares Core FTSE 100 UCITS ETF",
+            "weight_change": 0.35,
+            "effective_date": "2026-05-30",
+            "estimated_flow_usd": 280000000,
+            "currency": "GBP"
+          }
+        },
+        {
+          "adapter": "insider-monitor",
+          "signal_type": "insider_buy",
+          "discovered_at": "2026-05-27T02:55:00Z",
+          "info_snippet": "CEO Wael Sawan purchased 15,000 shares at £26.82 (largest buy in 18 months)",
+          "raw_signal": {
+            "filer_name": "Wael Sawan",
+            "filer_title": "CEO",
+            "transaction_type": "Purchase",
+            "shares": 15000,
+            "price_avg": 26.82,
+            "total_value": 402300,
+            "currency": "GBP",
+            "form": "PDMR Notification",
+            "filed_at": "2026-05-27T02:40:00Z"
+          }
+        }
+      ],
+      "enrichment": null
+    },
+    {
+      "id": "cand-007",
+      "symbol": "AIR",
+      "exchange": "EURONEXT",
+      "yahoo_symbol": "AIR.PA",
+      "name": "Airbus SE",
+      "isin": "NL0000235190",
+      "workspace_state": "new",
+      "discovered_at": "2026-05-25T11:30:00Z",
+      "notes": "",
+      "sources": [
+        {
+          "adapter": "trend-scanner",
+          "signal_type": "trend_momentum",
+          "discovered_at": "2026-05-25T11:30:00Z",
+          "info_snippet": "Breakout from 6-month consolidation range on elevated volume. New YTD high.",
+          "raw_signal": {
+            "price": 167.80,
+            "breakout_level": 162.50,
+            "consolidation_days": 178,
+            "volume_ratio": 2.1,
+            "rsi_14": 65.3,
+            "ytd_high": true,
+            "atr_14": 4.2
+          }
+        }
+      ],
+      "enrichment": null
+    },
+    {
+      "id": "cand-008",
+      "symbol": "MSFT",
+      "exchange": "NASDAQ",
+      "yahoo_symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "isin": "US5949181045",
+      "workspace_state": "new",
+      "discovered_at": "2026-05-24T16:45:00Z",
+      "notes": "",
+      "sources": [
+        {
+          "adapter": "manual",
+          "signal_type": "manual",
+          "discovered_at": "2026-05-24T16:45:00Z",
+          "info_snippet": "Manually added – Azure AI growth story, Copilot monetization inflection point expected Q3",
+          "raw_signal": {
+            "added_by": "user",
+            "reason": "Azure AI revenue acceleration, GitHub Copilot reaching 2M paid seats",
+            "reference_links": [
+              "https://azure.microsoft.com/en-us/blog/",
+              "https://github.blog/2026-05-20-copilot-milestone/"
+            ]
+          }
+        }
+      ],
+      "enrichment": null
+    }
+  ]
+}

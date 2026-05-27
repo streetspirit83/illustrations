@@ -1,0 +1,19 @@
+{
+  "name": "discovery-workspace",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Discovery Workspace – systematic identification of trading candidates",
+  "scripts": {
+    "run:openinsider": "node adapters/_run.js openinsider",
+    "run:boerse-frankfurt": "node adapters/_run.js boerse-frankfurt",
+    "run:etf-holdings": "node adapters/_run.js etf-holdings"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "node-fetch": "^3.3.2",
+    "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

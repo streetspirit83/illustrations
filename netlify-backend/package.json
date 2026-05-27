@@ -1,0 +1,9 @@
+{
+  "name": "discovery-backend",
+  "version": "1.0.0",
+  "description": "Netlify backend for Discovery Workspace",
+  "dependencies": {
+    "@netlify/blobs": "^8.0.0"
+  },
+  "engines": { "node": ">=20" }
+}
