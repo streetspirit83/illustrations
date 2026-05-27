@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1117">
+  <title>Discovery Workspace</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ========================================================
+       HEADER
+       ======================================================== -->
+  <header id="app-header" role="banner">
+    <div class="header-logo">
+      <div class="header-logo-icon" aria-hidden="true">📡</div>
+      <div>
+        <div class="header-title">Discovery Workspace</div>
+        <div class="header-subtitle">Trading Candidates</div>
+      </div>
+    </div>
+
+    <!-- Blob tabs (also in header for easy access) -->
+    <nav class="filter-group" aria-label="Ansichten">
+      <button class="tab-btn active" data-blob="INBOX" aria-label="Posteingang anzeigen">
+        Inbox
+      </button>
+      <button class="tab-btn" data-blob="ARCHIVE" aria-label="Archiv anzeigen">
+        Archiv
+      </button>
+      <button class="tab-btn" data-blob="EXPORT" aria-label="Export anzeigen">
+        Export
+      </button>
+    </nav>
+
+    <div class="header-spacer" aria-hidden="true"></div>
+
+    <div class="header-actions">
+      <button id="btn-refresh" class="btn btn-ghost btn-icon" aria-label="Daten neu laden" title="Aktualisieren">
+        ↻
+      </button>
+      <button id="btn-upload" class="btn btn-secondary btn-sm" aria-label="JSON-Datei hochladen">
+        ↑ Import
+      </button>
+      <button id="btn-settings" class="btn btn-ghost btn-icon" aria-label="Einstellungen öffnen" title="Einstellungen">
+        ⚙
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       MOCK MODE BANNER
+       ======================================================== -->
+  <div id="mock-banner" role="status" aria-live="polite">
+    ⚠ Mock-Modus: Kein Backend konfiguriert. Änderungen werden nicht gespeichert.
+  </div>
+
+  <!-- ========================================================
+       FILTER BAR
+       ======================================================== -->
+  <div id="filter-bar" role="search" aria-label="Kandidaten filtern">
+    <div class="filter-group">
+      <label class="sr-only" for="filter-state">Status</label>
+      <select id="filter-state" class="filter-select" aria-label="Nach Status filtern">
+        <option value="all">Alle Status</option>
+        <option value="new">Neu</option>
+        <option value="reviewed">Geprüft</option>
+        <option value="promoted">Promoted</option>
+        <option value="dismissed">Abgelehnt</option>
+        <option value="imported">Importiert</option>
+      </select>
+    </div>
+
+    <div class="filter-divider" aria-hidden="true"></div>
+
+    <div class="filter-group">
+      <label class="sr-only" for="filter-adapter">Adapter</label>
+      <select id="filter-adapter" class="filter-select" aria-label="Nach Quelle filtern">
+        <option value="all">Alle Quellen</option>
+        <option value="insider-monitor">Insider Monitor</option>
+        <option value="etf-tracker">ETF Tracker</option>
+        <option value="trend-scanner">Trend Scanner</option>
+        <option value="manual">Manuell</option>
+      </select>
+    </div>
+
+    <div class="filter-divider" aria-hidden="true"></div>
+
+    <div class="filter-group" role="group" aria-label="Region filtern">
+      <button class="filter-pill region-pill active" data-region="all"    aria-pressed="true">Alle</button>
+      <button class="filter-pill region-pill"         data-region="US"     aria-pressed="false">US</button>
+      <button class="filter-pill region-pill"         data-region="DE"     aria-pressed="false">DE</button>
+      <button class="filter-pill region-pill"         data-region="EU"     aria-pressed="false">EU</button>
+      <button class="filter-pill region-pill"         data-region="other"  aria-pressed="false">Andere</button>
+    </div>
+
+    <div class="filter-divider" aria-hidden="true"></div>
+
+    <div class="filter-group" role="group" aria-label="Zeitraum filtern">
+      <button class="filter-pill date-pill active" data-range="all"  aria-pressed="true">Alle</button>
+      <button class="filter-pill date-pill"         data-range="24h"  aria-pressed="false">24h</button>
+      <button class="filter-pill date-pill"         data-range="7d"   aria-pressed="false">7 Tage</button>
+      <button class="filter-pill date-pill"         data-range="30d"  aria-pressed="false">30 Tage</button>
+    </div>
+
+    <div class="filter-divider" aria-hidden="true"></div>
+
+    <div class="filter-group">
+      <label class="sr-only" for="filter-search">Suche</label>
+      <input
+        type="search"
+        id="filter-search"
+        class="search-input"
+        placeholder="Symbol, Name, ISIN…"
+        aria-label="Kandidaten suchen"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      >
+    </div>
+  </div>
+
+  <!-- ========================================================
+       BULK ACTIONS BAR
+       ======================================================== -->
+  <div id="bulk-bar" role="toolbar" aria-label="Massenaktionen">
+    <span id="bulk-selected-count" class="bulk-count" aria-live="polite">
+      <strong>0</strong> ausgewählt
+    </span>
+
+    <button id="bulk-dismiss-btn" class="btn btn-danger btn-sm" aria-label="Auswahl ablehnen">
+      ✗ Ablehnen
+    </button>
+    <button id="bulk-promote-btn" class="btn btn-success btn-sm" aria-label="Auswahl promoten">
+      ↑ Promoten
+    </button>
+    <button id="bulk-enrich-btn" class="btn btn-secondary btn-sm" aria-label="KI-Enrichment für Auswahl ausführen">
+      ✦ AI Enrichment
+    </button>
+
+    <span id="bulk-enrich-progress" aria-live="polite" style="display:none;"></span>
+
+    <div style="flex:1" aria-hidden="true"></div>
+
+    <button id="bulk-clear-btn" class="btn btn-ghost btn-sm" aria-label="Auswahl aufheben">
+      Auswahl aufheben
+    </button>
+  </div>
+
+  <!-- ========================================================
+       MAIN CONTENT – CANDIDATE LIST
+       ======================================================== -->
+  <main id="main-content" role="main" aria-label="Kandidatenliste">
+    <div id="list-root" aria-live="polite" aria-atomic="false">
+      <!-- Populated by CandidateList component -->
+    </div>
+  </main>
+
+  <!-- ========================================================
+       DETAIL DRAWER
+       ======================================================== -->
+  <aside
+    id="detail-drawer"
+    role="complementary"
+    aria-label="Kandidat Details"
+    aria-hidden="true"
+  >
+    <!-- Header -->
+    <div class="drawer-header">
+      <div class="drawer-header-info">
+        <div>
+          <span id="drawer-symbol" class="drawer-symbol" aria-label="Symbol"></span>
+          <span id="drawer-exchange" class="drawer-exchange" aria-label="Börse"></span>
+          <span id="drawer-state-badge" aria-label="Status" style="margin-left:8px;vertical-align:middle;"></span>
+        </div>
+        <div id="drawer-name"  class="drawer-name"  aria-label="Unternehmensname"></div>
+        <div id="drawer-isin"  class="drawer-isin"  aria-label="ISIN"></div>
+      </div>
+      <button
+        id="drawer-close-btn"
+        class="btn btn-ghost btn-icon"
+        aria-label="Details schließen"
+        title="Schließen"
+        style="font-size:1.2rem; align-self:flex-start;"
+      >✕</button>
+    </div>
+
+    <!-- Scrollable body -->
+    <div class="drawer-body">
+
+      <!-- Links -->
+      <section class="drawer-section" aria-label="Externe Links">
+        <div class="drawer-section-title">Research Links</div>
+        <div class="links-row">
+          <a
+            id="link-tradingview"
+            class="link-btn"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Bei TradingView öffnen"
+          >
+            📈 TradingView
+          </a>
+          <a
+            id="link-yahoo"
+            class="link-btn"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Bei Yahoo Finance öffnen"
+          >
+            📊 Yahoo Finance
+          </a>
+          <a
+            id="link-stocktwits"
+            class="link-btn"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Bei StockTwits öffnen"
+          >
+            💬 StockTwits
+          </a>
+        </div>
+      </section>
+
+      <!-- Sources -->
+      <section class="drawer-section" aria-label="Signalquellen">
+        <div class="drawer-section-title">Quellen</div>
+        <div id="drawer-sources">
+          <!-- Populated by CandidateDetail -->
+        </div>
+      </section>
+
+      <!-- Notes -->
+      <section class="drawer-section" aria-label="Notizen">
+        <div class="drawer-section-title">Notizen</div>
+        <textarea
+          id="drawer-notes"
+          class="notes-textarea"
+          placeholder="Eigene Notizen zu diesem Kandidaten…"
+          aria-label="Notizen"
+        ></textarea>
+        <div id="notes-saved-hint" class="notes-saved-hint" role="status">Gespeichert ✓</div>
+      </section>
+
+      <!-- AI Enrichment -->
+      <section class="drawer-section" aria-label="KI-Analyse">
+        <div class="drawer-section-title">AI Enrichment</div>
+
+        <!-- Empty state with enrich button -->
+        <div id="enrichment-empty" class="enrichment-empty">
+          <div class="enrichment-empty-text">
+            Dieser Kandidat wurde noch nicht KI-analysiert.
+          </div>
+          <button
+            id="enrich-btn"
+            class="btn btn-primary btn-sm"
+            aria-label="KI-Enrichment ausführen"
+          >
+            ✦ AI-Enrichment ausführen
+          </button>
+        </div>
+
+        <!-- Loading state -->
+        <div id="enrichment-loading" class="enrichment-loading" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <span>Analysiere mit Claude…</span>
+        </div>
+
+        <!-- Enrichment content -->
+        <div id="enrichment-content" class="enrichment-content" aria-live="polite">
+          <!-- Populated by CandidateDetail._displayEnrichment() -->
+        </div>
+      </section>
+
+    </div><!-- /.drawer-body -->
+
+    <!-- Actions bar (bottom) -->
+    <div id="drawer-actions" class="drawer-actions" role="toolbar" aria-label="Kandidat Aktionen">
+      <!-- Populated by CandidateDetail._renderActions() -->
+    </div>
+
+  </aside><!-- /#detail-drawer -->
+
+  <!-- ========================================================
+       SETTINGS MODAL
+       ======================================================== -->
+  <div
+    id="settings-modal-backdrop"
+    class="modal-backdrop"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="settings-modal-title"
+  >
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="settings-modal-title" class="modal-title">Einstellungen</h2>
+        <button
+          id="settings-close-btn"
+          class="btn btn-ghost btn-icon"
+          aria-label="Einstellungen schließen"
+        >✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="settings-form" onsubmit="return false;">
+
+          <div class="form-warning" role="alert">
+            <span aria-hidden="true">⚠</span>
+            <span>Diese Werte werden nur lokal in deinem Browser gespeichert.</span>
+          </div>
+
+          <!-- Backend URL -->
+          <div class="form-group">
+            <label class="form-label" for="settings-backend-url">
+              Backend URL
+              <span class="optional">(optional)</span>
+            </label>
+            <input
+              type="url"
+              id="settings-backend-url"
+              class="form-input"
+              placeholder="https://my-backend.example.com"
+              autocomplete="off"
+              aria-describedby="settings-url-error settings-url-hint"
+            >
+            <div id="settings-url-hint" class="form-hint">
+              REST-Backend für Datenpersistenz. Leer lassen für Mock-Modus.
+            </div>
+            <div id="settings-url-error" class="form-error" role="alert"></div>
+          </div>
+
+          <!-- Shared Secret -->
+          <div class="form-group">
+            <label class="form-label" for="settings-secret">
+              Shared Secret
+              <span class="optional">(optional)</span>
+            </label>
+            <input
+              type="password"
+              id="settings-secret"
+              class="form-input"
+              placeholder="••••••••••••"
+              autocomplete="current-password"
+              aria-describedby="settings-secret-hint"
+            >
+            <div id="settings-secret-hint" class="form-hint">
+              Wird als <code>x-discovery-secret</code> Header gesendet.
+            </div>
+          </div>
+
+          <!-- Claude API Key -->
+          <div class="form-group">
+            <label class="form-label" for="settings-claude-key">
+              Claude API Key
+              <span class="optional">(für AI Enrichment)</span>
+            </label>
+            <input
+              type="password"
+              id="settings-claude-key"
+              class="form-input"
+              placeholder="sk-ant-••••••••"
+              autocomplete="off"
+              aria-describedby="settings-claude-hint"
+            >
+            <div id="settings-claude-hint" class="form-hint">
+              Anthropic API Key für direkten Browser-Zugriff auf Claude.
+            </div>
+          </div>
+
+          <!-- GitHub PAT -->
+          <div class="form-group">
+            <label class="form-label" for="settings-github-pat">
+              GitHub Personal Access Token
+              <span class="optional">(optional)</span>
+            </label>
+            <input
+              type="password"
+              id="settings-github-pat"
+              class="form-input"
+              placeholder="ghp_••••••••"
+              autocomplete="off"
+              aria-describedby="settings-pat-hint"
+            >
+            <div id="settings-pat-hint" class="form-hint">
+              Für GitHub-basierte Backend-Integrationen.
+            </div>
+          </div>
+
+          <!-- Test connection -->
+          <div class="form-group">
+            <button
+              type="button"
+              id="settings-test-btn"
+              class="btn btn-secondary btn-sm"
+              aria-label="Backend-Verbindung testen"
+            >
+              Verbindung testen
+            </button>
+            <div id="settings-test-result" class="form-hint" style="margin-top:6px;" aria-live="polite"></div>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button id="settings-cancel-btn" class="btn btn-ghost" aria-label="Abbrechen">
+          Abbrechen
+        </button>
+        <button id="settings-save-btn" class="btn btn-primary" aria-label="Einstellungen speichern">
+          Speichern
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       UPLOAD MODAL
+       ======================================================== -->
+  <div
+    id="upload-modal-backdrop"
+    class="modal-backdrop"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="upload-modal-title"
+  >
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="upload-modal-title" class="modal-title">Kandidaten importieren</h2>
+        <button
+          id="upload-close-btn"
+          class="btn btn-ghost btn-icon"
+          aria-label="Import schließen"
+        >✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div
+          id="upload-area"
+          class="upload-area"
+          role="button"
+          tabindex="0"
+          aria-label="JSON-Datei auswählen oder hier ablegen"
+        >
+          <div class="upload-area-icon" aria-hidden="true">📁</div>
+          <div class="upload-area-text">
+            <span id="upload-area-filename">JSON-Datei hier ablegen oder klicken</span>
+          </div>
+          <div class="upload-area-sub">Akzeptiert: .json (discovery-1.0 Schema)</div>
+        </div>
+
+        <!-- Hidden file input -->
+        <input
+          type="file"
+          id="upload-file-input"
+          accept=".json,application/json"
+          class="hidden"
+          aria-label="JSON-Datei auswählen"
+        >
+
+        <!-- Validation result -->
+        <div id="upload-result" class="upload-result" role="status" aria-live="polite"></div>
+
+        <div style="margin-top:14px;">
+          <p class="form-hint">
+            Die Datei muss dem <code>discovery-1.0</code> Schema entsprechen und ein
+            <code>candidates</code> Array enthalten. Kandidaten mit bestehender ID werden
+            aktualisiert.
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="upload-cancel-btn" class="btn btn-ghost" aria-label="Abbrechen">
+          Abbrechen
+        </button>
+        <button
+          id="upload-confirm-btn"
+          class="btn btn-primary"
+          disabled
+          aria-label="Import bestätigen"
+        >
+          Importieren
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       TOAST CONTAINER
+       ======================================================== -->
+  <div id="toast-container" role="region" aria-label="Benachrichtigungen" aria-live="polite"></div>
+
+  <!-- ========================================================
+       APP MODULE
+       ======================================================== -->
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>
